@@ -1,0 +1,114 @@
+/* Admin auth UI */
+.admin-badge {
+  position: fixed; top: 16px; right: 16px; z-index: 90;
+  appearance: none; border: 0; cursor: pointer;
+  padding: 8px 12px; border-radius: 999px;
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  letter-spacing: .08em;
+  background: rgba(0,0,0,.55);
+  color: var(--gold);
+  border: 1px solid rgba(255,216,107,.4);
+  text-shadow: 0 1px 0 #6b3a00;
+  display: inline-flex; align-items: center; gap: 6px;
+  backdrop-filter: blur(8px);
+}
+.admin-badge:hover { background: rgba(255,216,107,.18); }
+.admin-badge.on {
+  background: linear-gradient(135deg,#0c8a4a,#84cc16);
+  color: #06070d;
+  border-color: rgba(255,255,255,.3);
+  text-shadow: none;
+  box-shadow: 0 0 16px rgba(132,204,22,.45);
+}
+.admin-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 8px #fff;
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+@keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+.auth-modal { max-width: 460px; }
+.auth-note {
+  font-family: 'Fredoka', sans-serif; font-size: 13px;
+  color: var(--ink-dim); line-height: 1.5;
+  padding: 10px 12px; border-radius: 8px;
+  background: rgba(125,249,255,.06);
+  border: 1px solid rgba(125,249,255,.18);
+}
+.auth-note.small { font-size: 12px; }
+.auth-note code {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  background: rgba(0,0,0,.3); padding: 1px 5px; border-radius: 4px;
+  color: var(--neon);
+}
+.auth-err {
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  color: #ff6b9b; padding: 8px 10px;
+  background: rgba(255,107,155,.1);
+  border: 1px solid rgba(255,107,155,.3);
+  border-radius: 6px; letter-spacing: .04em;
+}
+.auth-ok {
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  color: #84cc16; padding: 8px 10px;
+  background: rgba(132,204,22,.1);
+  border: 1px solid rgba(132,204,22,.3);
+  border-radius: 6px; letter-spacing: .04em;
+}
+.auth-link {
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  align-self: flex-start; padding: 4px 0;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--neon); text-decoration: underline;
+}
+.auth-link:hover { color: var(--gold); }
+.auth-static {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  padding: 9px 11px; border-radius: 6px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  color: var(--ink);
+}
+.auth-static.small { font-size: 12px; padding: 7px 10px; }
+.auth-tabs {
+  display: flex; gap: 4px; padding: 8px 16px;
+  border-bottom: 2px dashed rgba(255,216,107,.18);
+  background: rgba(0,0,0,.18);
+}
+.auth-tabs button {
+  appearance: none; border: 0; cursor: pointer;
+  padding: 8px 12px; border-radius: 6px 6px 0 0;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  letter-spacing: .04em; text-transform: uppercase;
+  background: transparent; color: var(--ink-dim);
+}
+.auth-tabs button.on {
+  background: rgba(255,216,107,.14);
+  color: var(--gold);
+}
+.ab-foot.inline { padding-top: 14px; padding-bottom: 14px; border-top: 0; background: transparent; }
+.auth-demo {
+  font-family: 'Fredoka', sans-serif; font-size: 12px;
+  line-height: 1.55; color: var(--ink-dim);
+  padding: 11px 13px; border-radius: 8px;
+  background: rgba(255,216,107,.08);
+  border: 1px dashed rgba(255,216,107,.4);
+  position: relative;
+}
+.auth-demo strong { color: var(--ink); }
+.auth-demo-tag {
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  letter-spacing: .06em; color: #1a2f7a;
+  background: var(--gold); padding: 3px 6px; border-radius: 3px;
+  margin-right: 8px; margin-bottom: 4px;
+}
+.auth-code {
+  margin-top: 8px;
+  font-family: 'Press Start 2P', monospace; font-size: 22px;
+  letter-spacing: .25em; color: var(--gold);
+  text-shadow: 0 2px 0 #6b3a00, 0 0 16px rgba(255,216,107,.45);
+  text-align: center; padding: 10px 0;
+  background: rgba(0,0,0,.35); border-radius: 6px;
+}
