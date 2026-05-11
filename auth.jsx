@@ -12,7 +12,7 @@ const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 const SESSION_KEY = "ph_admin_session_v2";
 
 // --------------------------------------------------
-// Helpers
+// HELPERS
 // --------------------------------------------------
 
 async function sha256(str) {
@@ -69,6 +69,10 @@ window.useAdminAuth = function () {
     setReady(true);
   }, []);
 
+  // --------------------------------------------------
+  // LOGIN
+  // --------------------------------------------------
+
   const login = _useCallback(async (userId, password) => {
     try {
       const rows = await dbFetch(
@@ -115,10 +119,18 @@ window.useAdminAuth = function () {
     }
   }, []);
 
+  // --------------------------------------------------
+  // LOGOUT
+  // --------------------------------------------------
+
   const logout = _useCallback(() => {
     localStorage.removeItem(SESSION_KEY);
     setIsAdmin(false);
   }, []);
+
+  // --------------------------------------------------
+  // CHANGE PASSWORD
+  // --------------------------------------------------
 
   const changePassword = _useCallback(async (current, next) => {
     try {
@@ -132,7 +144,9 @@ window.useAdminAuth = function () {
       }
 
       const rows = await dbFetch(
-        `admin_users?user_id=eq.${encodeURIComponent(session.userId)}&select=*`
+        `admin_users?user_id=eq.${encodeURIComponent(
+          session.userId
+        )}&select=*`
       );
 
       if (!rows || !rows.length) {
@@ -385,29 +399,6 @@ window.ManageModal = function ManageModal({
 // RESET MODAL PLACEHOLDER
 // --------------------------------------------------
 
-window.ResetModal = function ResetModal({
-  open,
-  onClose,
-}) {
-  if (!open) return null;
-
-  return (
-    <div className="ab-back">
-      <div className="ab-modal auth-modal">
-        <div className="ab-hdr">
-          <h2>PASSWORD RESET</h2>
-
-          <button className="ab-x" onClick={onClose}>
-            ✕
-          </button>
-        </div>
-
-        <div className="ab-body">
-          <div className="auth-note">
-            Password reset flow is not implemented yet.
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+window.ResetModal = function ResetModal() {
+  return null;
 };
