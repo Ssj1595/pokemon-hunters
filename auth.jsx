@@ -6,8 +6,11 @@ const {
   useCallback: _useCallback,
 } = React;
 
-const SUPABASE_URL = window.SUPABASE_URL;
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
+const SUPABASE_URL =
+  "https://hordrkpxsfcnvfjbzzdb.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_v37mf5VzanKEEKB9RbxMMA_qvZQaUFZ";
 
 const SESSION_KEY = "ph_admin_session_v2";
 
