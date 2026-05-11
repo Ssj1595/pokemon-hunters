@@ -87,69 +87,85 @@ function useUploads() {
   }
 
   async function addPhoto(num, file) {
-    try {
-      const ext = file.name.split(".").pop();
+  try {
+    const ext = file.name.split(".").pop();
 
-      const filename = `${num}/${Date.now()}.${ext}`;
+    const filename = `${num}/${Date.now()}.${ext}`;
 
-      // --------------------------------------------------
-      // UPLOAD TO STORAGE
-      // --------------------------------------------------
+    // --------------------------------------------------
+    // UPLOAD FILE TO SUPABASE STORAGE
+    // --------------------------------------------------
 
-      const uploadRes = await fetch(
-        `${window.SUPABASE_URL}/storage/v1/object/bird-images/${filename}`,
-        {
-          method: "POST",
-          headers: {
-            apikey: window.SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
-            "Content-Type": file.type,
-          },
-          body: file,
-        }
-      );
-
-      if (!uploadRes.ok) {
-        const txt = await uploadRes.text();
-        throw new Error(txt);
-      }
-
-      // --------------------------------------------------
-      // PUBLIC URL
-      // --------------------------------------------------
-
-      const publicUrl =
-        `${window.SUPABASE_URL}/storage/v1/object/public/bird-images/${filename}`;
-
-      // --------------------------------------------------
-      // SAVE URL TO DATABASE
-      // --------------------------------------------------
-
-      await dbFetch("bird_photos", {
+    const uploadRes = await fetch(
+      `${window.SUPABASE_URL}/storage/v1/object/bird-images/${filename}`,
+      {
         method: "POST",
+        headers: {
+          apikey: window.SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
+          "Content-Type": file.type,
+        },
+        body: file,
+      }
+    );
+
+    if (!uploadRes.ok) {
+      const txt = await uploadRes.text();
+      console.error(txt);
+      throw new Error("Storage upload failed");
+    }
+
+    // --------------------------------------------------
+    // PUBLIC URL
+    // --------------------------------------------------
+
+    const publicUrl =
+      `${window.SUPABASE_URL}/storage/v1/object/public/bird-images/${filename}`;
+
+    // --------------------------------------------------
+    // SAVE IMAGE URL TO DATABASE
+    // --------------------------------------------------
+
+    const dbRes = await fetch(
+      `${window.SUPABASE_URL}/rest/v1/bird_photos`,
+      {
+        method: "POST",
+        headers: {
+          apikey: window.SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "return=representation",
+        },
         body: JSON.stringify({
           bird_num: num,
           image_url: publicUrl,
         }),
-      });
+      }
+    );
 
-      // --------------------------------------------------
-      // UPDATE UI
-      // --------------------------------------------------
-
-      setUploads((prev) => {
-        const cur = prev[num] || [];
-
-        return {
-          ...prev,
-          [num]: [...cur, publicUrl],
-        };
-      });
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed");
+    if (!dbRes.ok) {
+      const txt = await dbRes.text();
+      console.error(txt);
+      throw new Error("Database save failed");
     }
+
+    // --------------------------------------------------
+    // UPDATE UI
+    // --------------------------------------------------
+
+    setUploads((prev) => {
+      const cur = prev[num] || [];
+
+      return {
+        ...prev,
+        [num]: [...cur, publicUrl],
+      };
+    });
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Upload failed");
   }
+}
 
   async function removePhoto(num, idx) {
     try {
