@@ -17,6 +17,14 @@ const ALLOWED_EMAILS = Object.freeze([
 const DEFAULT_USERID  = "SSJNJ";
 const DEFAULT_PASS    = "973827";
 
+const SUPABASE_URL = "https://hordrkpxsfcnvfjbzzdb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_v37mf5VzanKEEKB9RbxMMA_qvZQaUFZ";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
 async function sha256(str) {
   const buf = new TextEncoder().encode(str);
   const hash = await crypto.subtle.digest("SHA-256", buf);
