@@ -13,6 +13,32 @@
   backdrop-filter: blur(8px);
 }
 .admin-badge:hover { background: rgba(255,216,107,.18); }
+.view-toggle {
+  position: fixed; top: 16px; right: 120px; z-index: 90;
+  display: inline-flex; align-items: stretch; gap: 0;
+  padding: 3px; border-radius: 999px;
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,216,107,.4);
+  backdrop-filter: blur(8px);
+  font-family: 'Press Start 2P', monospace;
+}
+.view-toggle button {
+  appearance: none; border: 0; cursor: pointer;
+  padding: 6px 10px; border-radius: 999px;
+  font: inherit; font-size: 8px; letter-spacing: .08em;
+  background: transparent; color: rgba(255,216,107,.72);
+  text-shadow: 0 1px 0 #6b3a00;
+  transition: background .15s ease, color .15s ease;
+}
+.view-toggle button:hover { color: var(--gold); }
+.view-toggle button.active {
+  background: linear-gradient(135deg,#0c8a4a,#84cc16);
+  color: #06070d; text-shadow: none;
+  box-shadow: 0 0 12px rgba(132,204,22,.4);
+}
+@media (max-width: 720px) {
+  .view-toggle { right: 12px; top: 60px; }
+}
 .admin-badge.on {
   background: linear-gradient(135deg,#0c8a4a,#84cc16);
   color: #06070d;

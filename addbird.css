@@ -202,6 +202,98 @@
   50%     { transform: translateY(-12px) rotate(calc(var(--r,0deg) + 6deg)); }
 }
 
+/* ─── Stats editor (in AddBird modal) ─── */
+.ab-stats-row > span:first-child { margin-bottom: 4px; }
+.ab-stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  padding: 10px; border-radius: 10px;
+  border: 1px solid rgba(255,216,107,.25);
+  background: rgba(255,216,107,.04);
+}
+@media (max-width: 480px) { .ab-stats-grid { grid-template-columns: 1fr; } }
+.ab-stat { display: flex; flex-direction: column; gap: 6px; padding: 6px 4px; }
+.ab-stat-hd { display: grid; grid-template-columns: 20px 1fr 56px; align-items: center; gap: 8px; }
+.ab-stat-e { font-size: 16px; line-height: 1; }
+.ab-stat-l {
+  font-family: 'Press Start 2P', monospace; font-size: 7px;
+  letter-spacing: .04em; color: var(--ink-dim); text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ab-stat-v {
+  width: 56px; padding: 6px 8px !important; text-align: center;
+  font-family: 'Press Start 2P', monospace !important; font-size: 9px !important;
+  color: #FFD86B !important;
+}
+.ab-stat-slider {
+  width: 100%; height: 8px; -webkit-appearance: none; appearance: none;
+  background: linear-gradient(90deg, #b8860b 0%, #ffd700 var(--p,50%), rgba(255,255,255,.08) var(--p,50%), rgba(255,255,255,.08) 100%);
+  border-radius: 999px; outline: none;
+  border: 1px solid rgba(255,216,107,.2);
+}
+.ab-stat-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle, #fff8b0 0%, #ffd700 60%, #b8860b 100%);
+  border: 2px solid #fff; cursor: pointer;
+  box-shadow: 0 0 8px rgba(255,215,0,.6);
+}
+.ab-stat-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle, #fff8b0 0%, #ffd700 60%, #b8860b 100%);
+  border: 2px solid #fff; cursor: pointer;
+  box-shadow: 0 0 8px rgba(255,215,0,.6);
+}
+
+/* ─── Move editor ─── */
+.ab-move { display: flex; flex-direction: column; gap: 8px; }
+.ab-move-name { font-family: 'Press Start 2P', monospace !important; font-size: 11px !important; color: #FFD86B !important; }
+
+/* ─── Rarity pills ─── */
+.ab-pill.rar-mythic.on    { background: linear-gradient(135deg,#ff00ff,#ffd700,#00ffff); }
+.ab-pill.rar-legendary.on { background: linear-gradient(135deg,#FFD86B,#fb923c); color: #1a2f7a; }
+.ab-pill.rar-epic.on      { background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; }
+.ab-pill.rar-rare.on      { background: linear-gradient(135deg,#60a5fa,#2563eb); color: #fff; }
+.ab-pill.rar-uncommon.on  { background: linear-gradient(135deg,#86efac,#16a34a); color: #052e16; }
+.ab-pill.rar-common.on    { background: linear-gradient(135deg,#cbd5e1,#94a3b8); color: #0f172a; }
+
+/* ─── Photo reorder ─── */
+.ab-hint { font-family: 'Fredoka', sans-serif; font-size: 11px; color: var(--ink-faint); font-style: normal; letter-spacing: 0; text-transform: none; margin-left: 6px; }
+.ab-photo-idx {
+  position: absolute; left: 4px; top: 4px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #FFD86B; color: #1a2f7a;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 0 rgba(0,0,0,.5);
+  z-index: 2;
+}
+.ab-photo-reorder {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; gap: 0;
+  background: rgba(0,0,0,.55); backdrop-filter: blur(2px);
+}
+.ab-photo-reorder button {
+  flex: 1; appearance: none; border: 0; cursor: pointer;
+  padding: 4px 0; font-family: 'Press Start 2P', monospace; font-size: 9px;
+  background: transparent; color: #FFD86B;
+}
+.ab-photo-reorder button:disabled { color: rgba(255,255,255,.2); cursor: not-allowed; }
+.ab-photo-reorder button:not(:disabled):hover { background: rgba(255,216,107,.18); }
+
+/* ─── Danger / delete button in foot ─── */
+.ab-foot-spacer { flex: 1; }
+.ab-btn.danger {
+  background: linear-gradient(135deg,#ef4444,#9f1239);
+  color: #fff;
+  box-shadow: 0 3px 0 #4a0a18, 0 0 14px rgba(239,68,68,.35);
+}
+.ab-btn.danger:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #4a0a18; }
+.ab-btn.danger:active { transform: translateY(2px); box-shadow: 0 1px 0 #4a0a18; }
+@media (max-width: 480px) {
+  .ab-foot { flex-wrap: wrap; }
+  .ab-foot-spacer { flex-basis: 100%; }
+}
+
 /* Custom-bird marker on cards */
 .collno.custom { color: var(--neon); border-color: rgba(125,249,255,.5); }
 .delbtn {
