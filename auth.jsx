@@ -206,26 +206,37 @@ window.useAdminAuth = function () {
 window.AdminBadge = function AdminBadge({
   auth,
   onOpenLogin,
-  onOpenManage,
+  onOpenManage
 }) {
-  if (!auth?.ready) return null;
+  const isAdmin = auth?.isAdmin;
+
+  const handleClick = () => {
+    if (isAdmin) {
+      onOpenManage?.();
+    } else {
+      onOpenLogin?.();
+    }
+  };
 
   return (
-    <button
-      className={`admin-badge ${auth.isAdmin ? "on" : ""}`}
-      onClick={() => {
-        if (auth.isAdmin) {
-          onOpenManage();
-        } else {
-          onOpenLogin();
-        }
-      }}
-      title={auth.isAdmin ? "Admin Panel" : "Admin Login"}
-    >
-      {auth.isAdmin && <span className="dot"></span>}
+    <div className="admin-badge-wrap">
+      <button
+        type="button"
+        className={`admin-badge ${isAdmin ? "on" : ""}`}
+        onClick={handleClick}
+      >
+        <span
+          className="dot"
+          style={{
+            opacity: isAdmin ? 1 : 0.5,
+          }}
+        />
 
-      {auth.isAdmin ? "ADMIN ACTIVE" : "ADMIN"}
-    </button>
+        <span>
+          {isAdmin ? "ADMIN ACTIVE" : "ADMIN LOGIN"}
+        </span>
+      </button>
+    </div>
   );
 };
 
