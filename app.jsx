@@ -1,5 +1,10 @@
 /* global React, ReactDOM, BIRD_DATA, HABITAT_META, BEHAVIOR_META, REGION_META, BIRD_IMAGES, RARITY_META, STAT_META */
 const { useState, useEffect, useMemo, useRef, useCallback } = React;
+const TweaksPanel = window.TweaksPanel || null;
+const TweakSection = window.TweakSection || null;
+const TweakSlider = window.TweakSlider || null;
+const TweakToggle = window.TweakToggle || null;
+const TweakText = window.TweakText || null;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "heroTitle": "Pokémon Hunters\n",
@@ -536,11 +541,6 @@ function App() {
     setEditTarget({ ...bird, photos });
     setShowAdd(true);
   };
-
-  const {
-    TweaksPanel, TweakSection, TweakSlider, TweakToggle, TweakText
-  } = window;
-
   return (
     <>
       <div className="bg-stage">
@@ -679,7 +679,7 @@ function App() {
 
       <ZoomModal url={zoomUrl} onClose={() => setZoomUrl(null)} />
 
-      {TweaksPanel &&
+      {TweaksPanel && TweakSection && TweakSlider && TweakToggle && TweakText && (
         <TweaksPanel>
           <TweakSection label="Hero copy" />
           <TweakText label="Title" value={t.heroTitle} onChange={(v) => setTweak("heroTitle", v)} />
@@ -692,9 +692,12 @@ function App() {
           <TweakSlider label="3D tilt" value={t.tiltStrength} min={0} max={20} step={1} unit="°"
             onChange={(v) => setTweak("tiltStrength", v)} />
         </TweaksPanel>
-      }
+      )}
     </>
   );
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);

@@ -566,3 +566,9 @@ Object.assign(window, {
   TweakSlider, TweakToggle, TweakRadio, TweakSelect,
   TweakText, TweakNumber, TweakColor, TweakButton,
 });
+
+window.TweaksPanel = TweaksPanel;
+window.TweakSection = TweakSection;
+window.TweakSlider = TweakSlider;
+window.TweakToggle = TweakToggle;
+window.TweakText = TweakText;
