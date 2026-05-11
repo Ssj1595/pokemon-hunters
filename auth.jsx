@@ -1,9 +1,13 @@
 /* global React */
 
-const { useState: _useState, useEffect: _useEffect, useCallback: _useCallback } = React;
+const {
+  useState: _useState,
+  useEffect: _useEffect,
+  useCallback: _useCallback,
+} = React;
 
-const SUPABASE_URL = "https://hordrkpxsfcnvfjbzzdb.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_v37mf5VzanKEEKB9RbxMMA_qvZQaUFZ";
+const SUPABASE_URL = window.SUPABASE_URL;
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 
 const SESSION_KEY = "ph_admin_session_v2";
 
@@ -13,6 +17,7 @@ const SESSION_KEY = "ph_admin_session_v2";
 
 async function sha256(str) {
   const buf = new TextEncoder().encode(str);
+
   const hash = await crypto.subtle.digest("SHA-256", buf);
 
   return Array.from(new Uint8Array(hash))
@@ -43,7 +48,7 @@ async function dbFetch(path, options = {}) {
 }
 
 // --------------------------------------------------
-// Auth Hook
+// AUTH HOOK
 // --------------------------------------------------
 
 window.useAdminAuth = function () {
@@ -57,14 +62,12 @@ window.useAdminAuth = function () {
       if (s && s.loggedIn && (!s.expires || s.expires > Date.now())) {
         setIsAdmin(true);
       }
-    } catch {}
+    } catch (err) {
+      console.error(err);
+    }
 
     setReady(true);
   }, []);
-
-  // --------------------------------------------------
-  // LOGIN
-  // --------------------------------------------------
 
   const login = _useCallback(async (userId, password) => {
     try {
@@ -90,13 +93,14 @@ window.useAdminAuth = function () {
         };
       }
 
-      const session = {
-        loggedIn: true,
-        userId,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-      };
-
-      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      localStorage.setItem(
+        SESSION_KEY,
+        JSON.stringify({
+          loggedIn: true,
+          userId,
+          expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        })
+      );
 
       setIsAdmin(true);
 
@@ -111,18 +115,10 @@ window.useAdminAuth = function () {
     }
   }, []);
 
-  // --------------------------------------------------
-  // LOGOUT
-  // --------------------------------------------------
-
   const logout = _useCallback(() => {
     localStorage.removeItem(SESSION_KEY);
     setIsAdmin(false);
   }, []);
-
-  // --------------------------------------------------
-  // CHANGE PASSWORD
-  // --------------------------------------------------
 
   const changePassword = _useCallback(async (current, next) => {
     try {
@@ -177,59 +173,50 @@ window.useAdminAuth = function () {
     }
   }, []);
 
-  // --------------------------------------------------
-  // PASSWORD RESET
-  // --------------------------------------------------
-
-  const requestReset = _useCallback(async (email) => {
-    try {
-      const rows = await dbFetch(
-        `admin_users?email=eq.${encodeURIComponent(email)}&select=*`
-      );
-
-      if (!rows || !rows.length) {
-        return {
-          ok: false,
-          error: "Email not found",
-        };
-      }
-
-      return {
-        ok: true,
-      };
-    } catch (err) {
-      console.error(err);
-
-      return {
-        ok: false,
-        error: "Reset request failed",
-      };
-    }
-  }, []);
-
-  const completeReset = _useCallback(async (email, code, newPass) => {
-    return {
-      ok: false,
-      error: "Implement email reset flow using Supabase Auth later",
-    };
-  }, []);
-
   return {
     isAdmin,
     ready,
     login,
     logout,
     changePassword,
-    requestReset,
-    completeReset,
   };
 };
 
 // --------------------------------------------------
-// UI COMPONENTS
+// ADMIN BUTTON
 // --------------------------------------------------
 
-window.AdminAuthModal = function AdminAuthModal({
+window.AdminBadge = function AdminBadge({
+  auth,
+  onOpenLogin,
+  onOpenManage,
+}) {
+  if (!auth?.ready) return null;
+
+  return (
+    <button
+      className={`admin-badge ${auth.isAdmin ? "on" : ""}`}
+      onClick={() => {
+        if (auth.isAdmin) {
+          onOpenManage();
+        } else {
+          onOpenLogin();
+        }
+      }}
+      title={auth.isAdmin ? "Admin Panel" : "Admin Login"}
+    >
+      {auth.isAdmin && <span className="dot"></span>}
+
+      {auth.isAdmin ? "ADMIN ACTIVE" : "ADMIN"}
+    </button>
+  );
+};
+
+// --------------------------------------------------
+// LOGIN MODAL
+// --------------------------------------------------
+
+window.LoginModal = function LoginModal({
   open,
   onClose,
   auth,
@@ -299,6 +286,127 @@ window.AdminAuthModal = function AdminAuthModal({
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
+      </div>
+    </div>
+  );
+};
+
+// --------------------------------------------------
+// MANAGE MODAL
+// --------------------------------------------------
+
+window.ManageModal = function ManageModal({
+  open,
+  onClose,
+  auth,
+}) {
+  const [current, setCurrent] = _useState("");
+  const [next, setNext] = _useState("");
+  const [msg, setMsg] = _useState("");
+  const [err, setErr] = _useState("");
+
+  if (!open || !auth?.isAdmin) return null;
+
+  async function handlePassword(e) {
+    e.preventDefault();
+
+    setErr("");
+    setMsg("");
+
+    const res = await auth.changePassword(current, next);
+
+    if (!res.ok) {
+      setErr(res.error || "Failed");
+      return;
+    }
+
+    setMsg("Password updated successfully");
+
+    setCurrent("");
+    setNext("");
+  }
+
+  return (
+    <div className="ab-back">
+      <div className="ab-modal auth-modal">
+        <div className="ab-hdr">
+          <h2>ADMIN PANEL</h2>
+
+          <button className="ab-x" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+
+        <div className="ab-body">
+          <button
+            className="savebtn"
+            onClick={() => {
+              auth.logout();
+              onClose();
+            }}
+          >
+            Logout
+          </button>
+
+          <form onSubmit={handlePassword} className="ab-row">
+            <span>Current Password</span>
+
+            <input
+              type="password"
+              value={current}
+              onChange={(e) => setCurrent(e.target.value)}
+              required
+            />
+
+            <span>New Password</span>
+
+            <input
+              type="password"
+              value={next}
+              onChange={(e) => setNext(e.target.value)}
+              required
+            />
+
+            {msg && <div className="auth-note">{msg}</div>}
+
+            {err && <div className="auth-err">{err}</div>}
+
+            <button className="savebtn" type="submit">
+              Change Password
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --------------------------------------------------
+// RESET MODAL PLACEHOLDER
+// --------------------------------------------------
+
+window.ResetModal = function ResetModal({
+  open,
+  onClose,
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="ab-back">
+      <div className="ab-modal auth-modal">
+        <div className="ab-hdr">
+          <h2>PASSWORD RESET</h2>
+
+          <button className="ab-x" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+
+        <div className="ab-body">
+          <div className="auth-note">
+            Password reset flow is not implemented yet.
+          </div>
+        </div>
       </div>
     </div>
   );

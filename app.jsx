@@ -36,33 +36,170 @@ function migrateUploads() {
 }
 
 function useUploads() {
-  const [uploads, setUploads] = useState(migrateUploads);
-  const addPhoto = useCallback((num, dataUrl) => {
-    setUploads((prev) => {
-      const cur = prev[num] || [];
-      if (cur.length >= 5) return prev;
-      const next = { ...prev, [num]: [...cur, dataUrl] };
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
-      return next;
-    });
+  const [uploads, setUploads] = useState({});
+
+  useEffect(() => {
+    loadAll();
   }, []);
-  const removePhoto = useCallback((num, idx) => {
+
+  async function dbFetch(path, options = {}) {
+    const res = await fetch(`${window.SUPABASE_URL}/rest/v1/${path}`, {
+      ...options,
+      headers: {
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+        ...(options.headers || {}),
+      },
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt);
+    }
+
+    if (res.status === 204) return null;
+
+    return res.json();
+  }
+
+  async function loadAll() {
+    try {
+      const rows = await dbFetch(
+        "bird_photos?select=bird_num,image_url"
+      );
+
+      const grouped = {};
+
+      rows.forEach((r) => {
+        if (!grouped[r.bird_num]) {
+          grouped[r.bird_num] = [];
+        }
+
+        grouped[r.bird_num].push(r.image_url);
+      });
+
+      setUploads(grouped);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function addPhoto(num, file) {
+    try {
+      const ext = file.name.split(".").pop();
+
+      const filename = `${num}/${Date.now()}.${ext}`;
+
+      // --------------------------------------------------
+      // UPLOAD TO STORAGE
+      // --------------------------------------------------
+
+      const uploadRes = await fetch(
+        `${window.SUPABASE_URL}/storage/v1/object/bird-images/${filename}`,
+        {
+          method: "POST",
+          headers: {
+            apikey: window.SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
+            "Content-Type": file.type,
+          },
+          body: file,
+        }
+      );
+
+      if (!uploadRes.ok) {
+        const txt = await uploadRes.text();
+        throw new Error(txt);
+      }
+
+      // --------------------------------------------------
+      // PUBLIC URL
+      // --------------------------------------------------
+
+      const publicUrl =
+        `${window.SUPABASE_URL}/storage/v1/object/public/bird-images/${filename}`;
+
+      // --------------------------------------------------
+      // SAVE URL TO DATABASE
+      // --------------------------------------------------
+
+      await dbFetch("bird_photos", {
+        method: "POST",
+        body: JSON.stringify({
+          bird_num: num,
+          image_url: publicUrl,
+        }),
+      });
+
+      // --------------------------------------------------
+      // UPDATE UI
+      // --------------------------------------------------
+
+      setUploads((prev) => {
+        const cur = prev[num] || [];
+
+        return {
+          ...prev,
+          [num]: [...cur, publicUrl],
+        };
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed");
+    }
+  }
+
+  async function removePhoto(num, idx) {
+    try {
+      const arr = uploads[num] || [];
+      const target = arr[idx];
+
+      if (!target) return;
+
+      // --------------------------------------------------
+      // DELETE DB RECORD
+      // --------------------------------------------------
+
+      await fetch(
+        `${window.SUPABASE_URL}/rest/v1/bird_photos?image_url=eq.${encodeURIComponent(target)}`,
+        {
+          method: "DELETE",
+          headers: {
+            apikey: window.SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
+          },
+        }
+      );
+
+      // --------------------------------------------------
+      // REMOVE FROM UI
+      // --------------------------------------------------
+
+      setUploads((prev) => {
+        const cur = prev[num] || [];
+
+        const nextArr = cur.filter((_, i) => i !== idx);
+
+        return {
+          ...prev,
+          [num]: nextArr,
+        };
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function clearAll(num) {
     setUploads((prev) => {
-      const cur = prev[num] || [];
-      const arr = cur.filter((_, i) => i !== idx);
       const next = { ...prev };
-      if (arr.length) next[num] = arr; else delete next[num];
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
+      delete next[num];
       return next;
     });
-  }, []);
-  const clearAll = useCallback((num) => {
-    setUploads((prev) => {
-      const next = { ...prev }; delete next[num];
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
-      return next;
-    });
-  }, []);
+  }
+
   return [uploads, addPhoto, removePhoto, clearAll];
 }
 
@@ -92,15 +229,14 @@ function CarouselPhoto({ bird, photos, onAdd, onRemoveIdx, onZoom, canEdit }) {
   useEffect(() => { if (idx >= (photos?.length || 0)) setIdx(0); }, [photos, idx]);
 
   const handlePick = (e) => { e.stopPropagation(); fileRef.current?.click(); };
-  const handleFile = (e) => {
-    const files = e.target.files; if (!files) return;
-    Array.from(files).forEach(f => {
-      const r = new FileReader();
-      r.onload = () => onAdd(String(r.result));
-      r.readAsDataURL(f);
-    });
-    e.target.value = "";
-  };
+  const handleFile = async (e) => {
+  const files = e.target.files;
+  if (!files) return;
+  for (const f of Array.from(files)) {
+    await onAdd(f);
+  }
+  e.target.value = "";
+};
   const prev = (e) => { e.stopPropagation(); setIdx(i => (i - 1 + photos.length) % photos.length); };
   const next = (e) => { e.stopPropagation(); setIdx(i => (i + 1) % photos.length); };
 
@@ -261,7 +397,7 @@ function BirdCard({ bird, photos, onAddPhoto, onRemovePhoto, onDelete, onEdit, o
             <CarouselPhoto
               bird={bird}
               photos={photos}
-              onAdd={(url) => onAddPhoto(bird.num, url)}
+              onAdd={(file) => addPhoto(bird.num, file)}
               onRemoveIdx={(i) => onRemovePhoto(bird.num, i)}
               onZoom={onZoom}
               canEdit={isAdmin}
