@@ -35,10 +35,16 @@ function App() {
   ------------------------- */
 
   useEffect(() => {
+
     document.documentElement.setAttribute(
       "data-theme",
       "dark"
     );
+
+    document.body.classList.add(
+      "dark-mode"
+    );
+
   }, []);
 
   /* -------------------------
@@ -47,7 +53,7 @@ function App() {
 
   return (
 
-    <div className="app-shell dark-mode">
+    <div className="app-shell">
 
       {/* -------------------------
           ADMIN BUTTON
@@ -104,50 +110,60 @@ function App() {
       />
 
       {/* -------------------------
-          WEBSITE CONTENT
+          HERO
       ------------------------- */}
 
-      <header className="hero">
+      <header className="hero-section">
 
-        <h1 className="hero-title">
-          Pokémon Hunters
-        </h1>
+        <div className="hero-content">
 
-        <p className="hero-subtitle">
-          SSJ & NJ · Bird Life List
-        </p>
+          <h1 className="hero-title">
+            Pokémon Hunters
+          </h1>
+
+          <p className="hero-subtitle">
+            SSJ & NJ · Bird Life List
+          </p>
+
+        </div>
 
       </header>
+
+      {/* -------------------------
+          MAIN CONTENT
+      ------------------------- */}
 
       <main className="main-content">
 
         <section className="glass-card">
 
           <h2>
-            Welcome
+            Dark Mode Enabled
           </h2>
 
           <p>
-            Your Pokémon bird tracking
-            system is now connected to:
+            The website now permanently
+            stays in dark mode.
           </p>
 
-          <ul>
+          <ul className="feature-list">
+
             <li>
-              GitHub Pages
+              GitHub Pages connected
             </li>
 
             <li>
-              Custom domain
+              Custom domain active
             </li>
 
             <li>
-              Supabase auth
+              Supabase authentication active
             </li>
 
             <li>
-              Permanent dark mode
+              Admin login restored
             </li>
+
           </ul>
 
         </section>
@@ -159,7 +175,7 @@ function App() {
 }
 
 /* -------------------------
-   RENDER APP
+   RENDER
 ------------------------- */
 
 ReactDOM
