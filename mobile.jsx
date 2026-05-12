@@ -1,4 +1,4 @@
-/* global React */ 
+/* global React */
 // Pixel hero + mobile (Wattpad-style) list view
 const { useState: _u, useEffect: _e } = React;
 

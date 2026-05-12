@@ -1,5 +1,5 @@
 /* global React, ReactDOM, BIRD_DATA, HABITAT_META, BEHAVIOR_META, REGION_META, BIRD_IMAGES, RARITY_META, STAT_META */
-const { useState, useEffect, useMemo, useRef, useCallback } = React; 
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "heroTitle": "Pokémon Hunters\n",
