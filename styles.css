@@ -626,7 +626,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px 10px;
-  margin: 10px 14px 12px;
+  margin: 10px 0 12px;
   padding: 10px;
   border: 1px solid rgba(255,215,0,.25);
   border-radius: 10px;
@@ -649,13 +649,13 @@ body {
 .statcell:hover { background: rgba(255,215,0,.08); border-color: rgba(255,215,0,.35); transform: translateY(-1px); }
 .statcell .se { font-size: 12px; line-height: 1; font-family: sans-serif; filter: drop-shadow(0 0 4px rgba(255,215,0,.4)); }
 .statcell .sl {
-  font-family: 'Press Start 2P', monospace; font-size: 5px;
-  line-height: 1; letter-spacing: 0; color: var(--ink-dim); min-width: 0;
+  font-family: 'Press Start 2P', monospace; font-size: 7px;
+  line-height: 1.1; letter-spacing: 0; color: var(--ink-dim); min-width: 0;
   text-transform: uppercase;
   white-space: nowrap; overflow: visible;
 }
 .statcell .sv {
-  font-family: 'Press Start 2P', monospace; font-size: 6px;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
   letter-spacing: .02em;
   background: linear-gradient(180deg, #fff8b0 0%, #ffd700 45%, #b8860b 100%);
   -webkit-background-clip: text; background-clip: text;
@@ -773,7 +773,7 @@ body {
 
 /* ─────────── Edit existing-bird button on cards (admin) ─────────── */
 .editcardbtn {
-  position: absolute; top: 10px; left: 10px; z-index: 4;
+  position: absolute; top: 10px; right: 10px; z-index: 5;
   width: 28px; height: 28px;
   border-radius: 8px;
   background: rgba(125,249,255,.18);
@@ -783,6 +783,18 @@ body {
   backdrop-filter: blur(6px);
 }
 .editcardbtn:hover { background: rgba(125,249,255,.35); }
+
+/* Delete button — sits next to edit on the top right */
+.delbtn {
+  position: absolute; top: 10px; right: 44px; z-index: 5;
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(239,68,68,.18);
+  color: #fca5a5; border: 1px solid rgba(239,68,68,.4);
+  cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.delbtn:hover { background: rgba(239,68,68,.5); color: #fff; }
 
 /* ─────────── Image zoom modal ─────────── */
 .zoom-back {
@@ -1381,3 +1393,295 @@ body {
 @media (min-width: 720px) {
   .mobile-only { display: none !important; }
 }
+
+/* ───────────────────────────────────────────────────────────
+   MOBILE-VIEW class (admin Mobile preview)
+   Triggered by JS on real-mobile viewport too — see app.jsx.
+   Lets the admin desktop preview render a true phone layout
+   without relying on actual viewport width.
+   ─────────────────────────────────────────────────────────── */
+body.mobile-view .desktop-only { display: none !important; }
+body.mobile-view .grid:not(.grid--mobile) { display: none; }
+
+/* Phone-frame preview shell — wraps the app in a 412px-wide centered
+   "phone" so it visually matches what a OnePlus-class device renders. */
+body.phone-preview {
+  background: #050816;
+  overflow-x: hidden;
+}
+body.phone-preview > #root,
+body.phone-preview > .app-root {
+  width: 412px;
+  margin: 0 auto;
+  min-height: 100vh;
+  border-left: 1px solid rgba(255,255,255,.08);
+  border-right: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 0 80px rgba(0,0,0,.7);
+  overflow: hidden;
+}
+
+/* ─── Stat table — tighter, single-column on mobile ─── */
+body.mobile-view .stattable {
+  grid-template-columns: 1fr;
+  gap: 4px;
+  margin: 8px 12px 10px;
+  padding: 8px;
+}
+body.mobile-view .statcell {
+  grid-template-columns: 18px 1fr auto;
+  gap: 8px;
+  padding: 6px 8px;
+}
+body.mobile-view .statcell .se { font-size: 14px; }
+body.mobile-view .statcell .sl { font-size: 9px; letter-spacing: .04em; }
+body.mobile-view .statcell .sv { font-size: 10px; letter-spacing: .04em; }
+
+/* ─── Card front — bigger names, badges, foot text on mobile ─── */
+body.mobile-view .cardname { font-size: 11px; line-height: 1.45; }
+body.mobile-view .collno { font-size: 8px; padding: 4px 6px; }
+body.mobile-view .badge { font-size: 7.5px; padding: 3px 6px; }
+body.mobile-view .badge .e { font-size: 10px; }
+body.mobile-view .badges { gap: 4px; padding: 0 12px 6px; }
+body.mobile-view .cardhdr { padding: 10px 12px 6px; gap: 6px; }
+body.mobile-view .cardfoot { font-size: 7.5px; padding: 6px 10px 10px; gap: 6px; }
+body.mobile-view .cardfoot .where { max-width: 70%; }
+body.mobile-view .photo .placeholder { font-size: 48px; }
+body.mobile-view .photo .placeholder small { font-size: 8.5px; margin-top: 8px; }
+
+/* ─── Card back — bigger title strip, rarity strip, fact text ─── */
+body.mobile-view .back .inner { padding: 14px; gap: 8px; }
+body.mobile-view .back .name { font-size: 10px; line-height: 1.45; }
+body.mobile-view .back .sci { font-size: 11px; }
+body.mobile-view .card-title-strip { font-size: 8px; margin: 0 12px 8px; }
+body.mobile-view .rarity-strip { margin: 0 12px 6px; padding: 5px 8px; font-size: 8px; }
+body.mobile-view .rarity-strip .hp em { font-size: 10px; }
+body.mobile-view .back .factlist li { font-size: 11px; padding-left: 14px; }
+body.mobile-view .back .meta { font-size: 7px; padding-top: 8px; }
+
+/* ─── Card grid — tighter on real mobile ─── */
+body.mobile-view .grid.grid--mobile { gap: 10px; padding: 0 8px; }
+body.mobile-view .grid.grid--mobile > .card-wrap { aspect-ratio: 5 / 8; }
+
+/* ─── Filter bar — readable on real mobile ─── */
+body.mobile-view .mfilter-bar { padding: 0 8px; gap: 6px; }
+body.mobile-view .mfilter-toggle { font-size: 8px; padding: 8px 10px; }
+body.mobile-view .mfilter-bar .search { min-width: 0; }
+
+/* ──────────────────────────────────────────────────────────
+   Mobile-only card refinements (per inline-comment request)
+   - Front: edit btn → top-right · badges = emoji only ·
+            bigger photo · tiny location/date
+   - Back:  no name/sci · no rarity-strip · no FIRST SPOTTED ·
+            stat labels hidden · compact stat block · smaller
+            title-strip + move text
+   ────────────────────────────────────────────────────────── */
+
+/* Front — edit/delete repositioned to top-right */
+body.mobile-view .editcardbtn { left: auto; right: 8px; top: 8px; width: 26px; height: 26px; font-size: 13px; }
+body.mobile-view .delbtn {
+  position: absolute; top: 8px; right: 38px; z-index: 4;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(20,20,28,.55);
+  color: #fff; font-size: 12px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+
+/* Front — badges show emoji only */
+body.mobile-view .badge { font-size: 0; padding: 4px 6px; gap: 0; }
+body.mobile-view .badge .e { font-size: 13px; }
+body.mobile-view .badge > span:not(.e) { display: none; }
+body.mobile-view .rarity-badge { font-size: 0; padding: 4px 6px; gap: 0; }
+body.mobile-view .rarity-badge .re { font-size: 13px; line-height: 1; }
+body.mobile-view .rarity-badge .rt { display: none; }
+body.mobile-view .badges { gap: 4px; padding: 0 12px 4px; }
+
+/* Front — give image more room */
+body.mobile-view .cardhdr { padding: 8px 12px 4px; gap: 6px; }
+body.mobile-view .cardname { font-size: 10px; line-height: 1.35; }
+body.mobile-view .face.front .photo { flex: 1 1 auto; min-height: 60%; }
+
+/* Front — tiny location & date */
+body.mobile-view .cardfoot {
+  font-size: 6px; padding: 4px 10px 6px;
+  letter-spacing: .04em; gap: 4px; line-height: 1.2;
+}
+body.mobile-view .cardfoot .where { max-width: 65%; }
+
+/* Back — strip everything that's not stats + move + title */
+body.mobile-view .face.back h3.name { display: none; }
+body.mobile-view .face.back .sci { display: none; }
+body.mobile-view .face.back .rarity-strip { display: none; }
+body.mobile-view .face.back .meta { display: none; }
+body.mobile-view .face.back .inner { padding: 12px 10px 10px; gap: 0; }
+
+/* Back — compact stat block (emoji only, 2-col, shorter) */
+body.mobile-view .stattable {
+  grid-template-columns: 1fr 1fr;
+  gap: 4px; padding: 6px; margin: 0 0 8px;
+}
+body.mobile-view .statcell {
+  grid-template-columns: 16px auto;
+  gap: 4px; padding: 5px 6px;
+  justify-content: space-between;
+}
+body.mobile-view .statcell .se { font-size: 13px; }
+body.mobile-view .statcell .sl { display: none; }
+body.mobile-view .statcell .sv { font-size: 8px; }
+
+/* Back — smaller title-strip + move-block */
+body.mobile-view .card-title-strip {
+  font-size: 7px; margin: 0 0 8px;
+  padding: 5px 8px;
+}
+body.mobile-view .move-block { padding: 7px 9px; margin-top: 6px; }
+body.mobile-view .move-block .mn { font-size: 7px; margin-bottom: 3px; letter-spacing: .04em; }
+body.mobile-view .move-block .md { font-size: 8.5px; line-height: 1.45; }
+
+/* Hide the page-bottom legend on mobile — replaced by the FAB */
+body.mobile-view .legend { display: none; }
+
+/* Mobile hero title — sized for the ~412px phone column,
+   not the actual viewport (which is wide in phone-preview). */
+body.mobile-view .pixel-hero { min-height: 380px; padding: 28px 16px 0; }
+body.mobile-view .pixel-title-wrap { margin-top: 4px; }
+body.mobile-view .pixel-sub { font-size: 9px; margin-bottom: 10px; letter-spacing: .1em; }
+body.mobile-view .pixel-title {
+  font-size: 34px;
+  letter-spacing: .03em;
+  text-shadow:
+    2px 2px 0 #ff6b6b,
+    4px 4px 0 #1a2f7a,
+    6px 6px 0 #0b1340,
+    7px 9px 16px rgba(0,0,0,.45);
+}
+body.mobile-view .pixel-title .row2 { margin-top: 4px; }
+body.mobile-view .moon { width: 60px; height: 60px; top: 12px; right: 12px; }
+body.mobile-view .trainers { padding: 0 18px; margin-top: 18px; min-height: 140px; }
+body.mobile-view .trainer svg { width: 60px; height: 90px; }
+body.mobile-view .trainers-vs { font-size: 22px; }
+body.mobile-view .pixel-counter { font-size: 9px; padding: 8px 12px; gap: 10px; }
+body.mobile-view .pixel-counter em { font-size: 11px; }
+
+/* ────────── How-to-read FAB + modal ────────── */
+.htr-fab {
+  position: fixed; right: 14px; bottom: 18px; z-index: 60;
+  width: 64px; height: 64px;
+  border: none; cursor: pointer;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffe45e, #ff9f1a 60%, #b35900);
+  color: #1a0f00;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow:
+    0 0 0 3px rgba(0,0,0,.45),
+    0 0 0 5px rgba(255,200,90,.45),
+    0 8px 20px rgba(0,0,0,.55),
+    0 0 22px rgba(255,170,40,.55);
+  font-family: 'Press Start 2P', monospace;
+  animation: htrPulse 2.4s ease-in-out infinite;
+  transition: transform .15s ease;
+}
+.htr-fab:active { transform: scale(.94); }
+.htr-fab-icon { font-size: 20px; line-height: 1; filter: drop-shadow(0 1px 0 rgba(0,0,0,.4)); }
+.htr-fab-lbl { font-size: 5.5px; line-height: 1.25; margin-top: 3px; letter-spacing: .04em; text-shadow: 0 1px 0 rgba(255,255,255,.35); }
+@keyframes htrPulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(0,0,0,.45), 0 0 0 5px rgba(255,200,90,.45), 0 8px 20px rgba(0,0,0,.55), 0 0 22px rgba(255,170,40,.55); }
+  50%     { box-shadow: 0 0 0 3px rgba(0,0,0,.45), 0 0 0 5px rgba(255,200,90,.7),  0 8px 20px rgba(0,0,0,.55), 0 0 34px rgba(255,170,40,.85); }
+}
+
+/* In phone-preview mode the viewport is wide but the app sits in a
+   412px column — pin the FAB to that column's right edge, not the page. */
+body.phone-preview .htr-fab {
+  right: calc(50% - 206px + 14px);
+}
+
+.htr-back {
+  position: fixed; inset: 0; z-index: 70;
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: htrFade .2s ease;
+}
+@keyframes htrFade { from { opacity: 0; } to { opacity: 1; } }
+.htr-sheet {
+  width: 100%; max-width: 520px; max-height: 86vh;
+  background: linear-gradient(180deg, #14171f 0%, #0c0e14 100%);
+  border-top: 1px solid rgba(125,249,255,.25);
+  border-radius: 18px 18px 0 0;
+  padding: 12px 16px 24px;
+  overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0,0,0,.6), 0 0 60px -10px var(--accent);
+  animation: htrSlide .28s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes htrSlide { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.htr-grab { width: 38px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.22); margin: 0 auto 10px; }
+.htr-hdr { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.htr-hdr h2 {
+  font-family: 'Press Start 2P', monospace; font-size: 11px;
+  color: var(--gold); margin: 0;
+  text-shadow: 0 2px 0 #6b3a00, 0 0 16px rgba(255,216,107,.4);
+  letter-spacing: .04em;
+}
+.htr-close {
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: #fff; font-size: 14px;
+  width: 30px; height: 30px; border-radius: 50%;
+  cursor: pointer;
+}
+.htr-sub { color: var(--ink-dim); font-size: 11px; margin: 8px 0 14px; line-height: 1.5; }
+
+.htr-section {
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  color: var(--ink-dim); letter-spacing: .08em;
+  margin: 14px 0 8px; padding-top: 10px;
+  border-top: 1px dashed rgba(255,255,255,.1);
+}
+.htr-section:first-of-type { border-top: 0; padding-top: 0; margin-top: 12px; }
+
+.htr-stats { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.htr-stat {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-left: 3px solid var(--c);
+  border-radius: 10px;
+}
+.htr-stat .ie { font-size: 22px; line-height: 1; flex-shrink: 0; filter: drop-shadow(0 0 6px var(--c)); }
+.htr-stat .it {
+  font-family: 'Press Start 2P', monospace; font-size: 8.5px;
+  letter-spacing: .04em; margin-bottom: 4px;
+  color: var(--c); text-shadow: 0 0 8px var(--c);
+}
+.htr-stat .id { font-size: 11px; color: var(--ink-dim); line-height: 1.5; }
+
+.htr-rarity { display: flex; flex-wrap: wrap; gap: 6px; }
+.htr-rk {
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  padding: 6px 9px; border-radius: 999px;
+  background: var(--rb-bg); color: var(--rb-col);
+  border: 1px solid currentColor;
+  box-shadow: 0 0 12px var(--rb-glow);
+  letter-spacing: .03em;
+}
+
+.htr-meta-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.htr-mk {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9.5px; padding: 5px 9px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px;
+  color: var(--ink);
+  letter-spacing: .02em;
+}
+.htr-mk .e { font-size: 13px; }
+
+[data-theme="light"] .htr-sheet { background: linear-gradient(180deg, #fff 0%, #f5f1ea 100%); }
+[data-theme="light"] .htr-stat { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.08); }
+[data-theme="light"] .htr-mk { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.08); color: #1a1a2e; }
+[data-theme="light"] .htr-close { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.1); color: #1a1a2e; }
+[data-theme="light"] .htr-sub { color: #4a4a55; }
+[data-theme="light"] .htr-section { color: #4a4a55; border-top-color: rgba(0,0,0,.1); }
