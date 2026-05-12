@@ -4,7 +4,7 @@
 // reset would require a backend. Passwords are hashed (SHA-256) and stored
 // in localStorage; reset codes are generated locally and would be emailed
 // from a server in production.
-const { useState: _useState, useEffect: _useEffect, useCallback: _useCallback } = React; 
+const { useState: _useState, useEffect: _useEffect, useCallback: _useCallback } = React;
 
 const CREDS_KEY   = "ph_admin_creds_v2";
 const SESSION_KEY = "ph_admin_session_v1";

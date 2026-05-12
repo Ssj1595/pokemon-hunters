@@ -1,4 +1,4 @@
-/* Admin auth UI */ 
+/* Admin auth UI */
 .admin-badge {
   position: fixed; top: 16px; right: 16px; z-index: 90;
   appearance: none; border: 0; cursor: pointer;

@@ -1,4 +1,4 @@
-/* Pokémon Hunters — holographic card styles */ 
+/* Pokémon Hunters — holographic card styles */
 :root {
   --bg-0: #06070d;
   --bg-1: #0e1020;
@@ -626,7 +626,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px 10px;
-  margin: 10px 0 12px;
+  margin: 10px 14px 12px;
   padding: 10px;
   border: 1px solid rgba(255,215,0,.25);
   border-radius: 10px;
@@ -649,13 +649,13 @@ body {
 .statcell:hover { background: rgba(255,215,0,.08); border-color: rgba(255,215,0,.35); transform: translateY(-1px); }
 .statcell .se { font-size: 12px; line-height: 1; font-family: sans-serif; filter: drop-shadow(0 0 4px rgba(255,215,0,.4)); }
 .statcell .sl {
-  font-family: 'Press Start 2P', monospace; font-size: 7px;
-  line-height: 1.1; letter-spacing: 0; color: var(--ink-dim); min-width: 0;
+  font-family: 'Press Start 2P', monospace; font-size: 5px;
+  line-height: 1; letter-spacing: 0; color: var(--ink-dim); min-width: 0;
   text-transform: uppercase;
   white-space: nowrap; overflow: visible;
 }
 .statcell .sv {
-  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  font-family: 'Press Start 2P', monospace; font-size: 6px;
   letter-spacing: .02em;
   background: linear-gradient(180deg, #fff8b0 0%, #ffd700 45%, #b8860b 100%);
   -webkit-background-clip: text; background-clip: text;
@@ -773,7 +773,7 @@ body {
 
 /* ─────────── Edit existing-bird button on cards (admin) ─────────── */
 .editcardbtn {
-  position: absolute; top: 10px; right: 10px; z-index: 5;
+  position: absolute; top: 10px; left: 10px; z-index: 4;
   width: 28px; height: 28px;
   border-radius: 8px;
   background: rgba(125,249,255,.18);
@@ -783,18 +783,6 @@ body {
   backdrop-filter: blur(6px);
 }
 .editcardbtn:hover { background: rgba(125,249,255,.35); }
-
-/* Delete button — sits next to edit on the top right */
-.delbtn {
-  position: absolute; top: 10px; right: 44px; z-index: 5;
-  width: 28px; height: 28px; border-radius: 8px;
-  background: rgba(239,68,68,.18);
-  color: #fca5a5; border: 1px solid rgba(239,68,68,.4);
-  cursor: pointer; font-size: 13px;
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(6px);
-}
-.delbtn:hover { background: rgba(239,68,68,.5); color: #fff; }
 
 /* ─────────── Image zoom modal ─────────── */
 .zoom-back {
@@ -1542,28 +1530,6 @@ body.mobile-view .move-block .md { font-size: 8.5px; line-height: 1.45; }
 /* Hide the page-bottom legend on mobile — replaced by the FAB */
 body.mobile-view .legend { display: none; }
 
-/* Mobile hero title — sized for the ~412px phone column,
-   not the actual viewport (which is wide in phone-preview). */
-body.mobile-view .pixel-hero { min-height: 380px; padding: 28px 16px 0; }
-body.mobile-view .pixel-title-wrap { margin-top: 4px; }
-body.mobile-view .pixel-sub { font-size: 9px; margin-bottom: 10px; letter-spacing: .1em; }
-body.mobile-view .pixel-title {
-  font-size: 34px;
-  letter-spacing: .03em;
-  text-shadow:
-    2px 2px 0 #ff6b6b,
-    4px 4px 0 #1a2f7a,
-    6px 6px 0 #0b1340,
-    7px 9px 16px rgba(0,0,0,.45);
-}
-body.mobile-view .pixel-title .row2 { margin-top: 4px; }
-body.mobile-view .moon { width: 60px; height: 60px; top: 12px; right: 12px; }
-body.mobile-view .trainers { padding: 0 18px; margin-top: 18px; min-height: 140px; }
-body.mobile-view .trainer svg { width: 60px; height: 90px; }
-body.mobile-view .trainers-vs { font-size: 22px; }
-body.mobile-view .pixel-counter { font-size: 9px; padding: 8px 12px; gap: 10px; }
-body.mobile-view .pixel-counter em { font-size: 11px; }
-
 /* ────────── How-to-read FAB + modal ────────── */
 .htr-fab {
   position: fixed; right: 14px; bottom: 18px; z-index: 60;
@@ -1588,12 +1554,6 @@ body.mobile-view .pixel-counter em { font-size: 11px; }
 @keyframes htrPulse {
   0%,100% { box-shadow: 0 0 0 3px rgba(0,0,0,.45), 0 0 0 5px rgba(255,200,90,.45), 0 8px 20px rgba(0,0,0,.55), 0 0 22px rgba(255,170,40,.55); }
   50%     { box-shadow: 0 0 0 3px rgba(0,0,0,.45), 0 0 0 5px rgba(255,200,90,.7),  0 8px 20px rgba(0,0,0,.55), 0 0 34px rgba(255,170,40,.85); }
-}
-
-/* In phone-preview mode the viewport is wide but the app sits in a
-   412px column — pin the FAB to that column's right edge, not the page. */
-body.phone-preview .htr-fab {
-  right: calc(50% - 206px + 14px);
 }
 
 .htr-back {

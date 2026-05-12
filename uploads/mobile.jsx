@@ -1,8 +1,8 @@
-/* global React */ 
+/* global React */
 // Pixel hero + mobile (Wattpad-style) list view
 const { useState: _u, useEffect: _e } = React;
 
-window.useViewport = function () {
+window.useViewport = function() {
   const [w, setW] = _u(typeof window !== "undefined" ? window.innerWidth : 1024);
   _e(() => {
     const onR = () => setW(window.innerWidth);
@@ -13,8 +13,8 @@ window.useViewport = function () {
 };
 
 // ─── Pixel trainer SVGs (Pokémon Red/Blue style, ~16x24 grid scaled up) ───
-const TRAINER_BOY =
-<svg viewBox="0 0 16 24" width="80" height="120" shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
+const TRAINER_BOY = (
+  <svg viewBox="0 0 16 24" width="80" height="120" shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
     {/* Red cap */}
     <rect x="4" y="1" width="8" height="2" fill="#d63031" />
     <rect x="3" y="2" width="10" height="2" fill="#d63031" />
@@ -44,11 +44,11 @@ const TRAINER_BOY =
     {/* Shoes */}
     <rect x="4" y="22" width="3" height="2" fill="#d63031" />
     <rect x="9" y="22" width="3" height="2" fill="#d63031" />
-  </svg>;
+  </svg>
+);
 
-
-const TRAINER_GIRL =
-<svg viewBox="0 0 16 24" width="80" height="120" shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
+const TRAINER_GIRL = (
+  <svg viewBox="0 0 16 24" width="80" height="120" shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
     {/* Pink hat */}
     <rect x="4" y="1" width="8" height="2" fill="#ec4899" />
     <rect x="3" y="2" width="10" height="2" fill="#ec4899" />
@@ -85,36 +85,36 @@ const TRAINER_GIRL =
     {/* Shoes */}
     <rect x="4" y="22" width="3" height="2" fill="#d63031" />
     <rect x="9" y="22" width="3" height="2" fill="#d63031" />
-  </svg>;
-
+  </svg>
+);
 
 window.PixelHero = function PixelHero({ count, isAdmin, onAdd }) {
   // Stars: deterministic scattered field
   const stars = Array.from({ length: 90 }).map((_, i) => {
     const x = (i * 53 + 11) % 100;
     const y = (i * 37 + 7) % 70; // keep above mountains
-    const s = 1 + i * 17 % 3; // 1-3px
-    const tw = 1.4 + i * 11 % 26 / 10; // twinkle duration 1.4-4s
-    const delay = i * 19 % 30 / 10;
+    const s = 1 + ((i * 17) % 3); // 1-3px
+    const tw = 1.4 + ((i * 11) % 26) / 10; // twinkle duration 1.4-4s
+    const delay = ((i * 19) % 30) / 10;
     return { x, y, s, tw, delay, key: i };
   });
   return (
     <header className="pixel-hero night" data-screen-label="Hero">
       <div className="starfield" aria-hidden="true">
-        {stars.map((st) =>
-        <span
-          key={st.key}
-          className="star"
-          style={{
-            left: `${st.x}%`,
-            top: `${st.y}%`,
-            width: `${st.s}px`,
-            height: `${st.s}px`,
-            animationDuration: `${st.tw}s`,
-            animationDelay: `${st.delay}s`
-          }} />
-
-        )}
+        {stars.map(st => (
+          <span
+            key={st.key}
+            className="star"
+            style={{
+              left: `${st.x}%`,
+              top: `${st.y}%`,
+              width: `${st.s}px`,
+              height: `${st.s}px`,
+              animationDuration: `${st.tw}s`,
+              animationDelay: `${st.delay}s`
+            }}
+          />
+        ))}
         {/* a couple of bright "hero" stars with cross-flare */}
         <span className="star big" style={{ left: "14%", top: "22%" }}></span>
         <span className="star big" style={{ left: "78%", top: "12%" }}></span>
@@ -157,8 +157,8 @@ window.PixelHero = function PixelHero({ count, isAdmin, onAdd }) {
       <div className="pixel-title-wrap">
         <div className="pixel-sub">★ A WILD BIRD APPEARED ★</div>
         <h1 className="pixel-title">
-          <span className="row1" style={{ textAlign: "left", fontSize: "50px" }}>POKÉMON</span>
-          <span className="row2" style={{ fontSize: "50px" }}>HUNTERS</span>
+          <span className="row1">POKÉMON</span>
+          <span className="row2">HUNTERS</span>
         </h1>
       </div>
 
@@ -176,9 +176,9 @@ window.PixelHero = function PixelHero({ count, isAdmin, onAdd }) {
 
       <div className="pixel-counter">
         <span><em>{count}</em> CAUGHT SO FAR</span>
-        {isAdmin &&
-        <button className="add-btn" onClick={onAdd}>＋ ADD</button>
-        }
+        {isAdmin && (
+          <button className="add-btn" onClick={onAdd}>＋ ADD</button>
+        )}
       </div>
 
       <svg className="terrain" viewBox="0 0 800 260" preserveAspectRatio="none" aria-hidden="true">
@@ -195,21 +195,21 @@ window.PixelHero = function PixelHero({ count, isAdmin, onAdd }) {
       <svg className="forest" viewBox="0 0 800 90" preserveAspectRatio="none" aria-hidden="true">
         {Array.from({ length: 18 }).map((_, i) => {
           const x = i * 46 + (i % 2 ? 14 : 0);
-          const h = 50 + i * 7 % 28;
+          const h = 50 + (i * 7) % 28;
           const top = 90 - h;
-          const col = i % 3 === 0 ? "#081c12" : i % 3 === 1 ? "#0d2418" : "#04140b";
+          const col = i % 3 === 0 ? "#081c12" : (i % 3 === 1 ? "#0d2418" : "#04140b");
           return (
             <g key={i}>
               <rect x={x + 10} y={90 - 12} width="6" height="12" fill="#4a2e1a" />
               <polygon points={`${x},90 ${x + 26},${top} ${x + 26 * 2},90`} fill={col} />
               <polygon points={`${x + 4},${78} ${x + 26},${top + 8} ${x + 48},${78}`} fill={col} opacity=".75" />
-            </g>);
-
+            </g>
+          );
         })}
       </svg>
       <div className="grass-strip" aria-hidden="true"></div>
-    </header>);
-
+    </header>
+  );
 };
 
 // ─── Mobile mini-card (3 per row, mirrors desktop card) ───
@@ -217,7 +217,7 @@ window.MobileListRow = function MobileListRow({ bird, photos, onOpen }) {
   const stockUrl = window.BIRD_IMAGES?.[bird.num];
   const hab = window.HABITAT_META[bird.habitat] || {};
   const rar = window.RARITY_META[bird.rarity] || window.RARITY_META["Common"];
-  const photo = photos && photos[0] || stockUrl;
+  const photo = (photos && photos[0]) || stockUrl;
   const style = {
     "--grad": hab.grad,
     "--accent": hab.accent,
@@ -233,7 +233,7 @@ window.MobileListRow = function MobileListRow({ bird, photos, onOpen }) {
       </div>
       <div className="mcard-photo">
         {photo ? <img src={photo} alt={bird.name} loading="lazy" /> :
-        <div className="mcard-ph">{hab.emoji || "🪶"}</div>}
+          <div className="mcard-ph">{hab.emoji || "🪶"}</div>}
         {photos && photos.length > 1 && <span className="mcard-count">{photos.length}📷</span>}
         {bird.custom && <span className="mcard-new">✨ NEW</span>}
       </div>
@@ -242,17 +242,17 @@ window.MobileListRow = function MobileListRow({ bird, photos, onOpen }) {
         <span className="mcard-hab" title={bird.habitat}>{hab.emoji}</span>
         <span className="mcard-loc" title={bird.loc}>📍 {bird.loc.split(",")[0]}</span>
       </div>
-    </div>);
-
+    </div>
+  );
 };
 
 window.MobileSheet = function MobileSheet({ bird, onClose, children }) {
   _e(() => {
     if (!bird) return;
-    const onKey = (e) => {if (e.key === "Escape") onClose();};
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
-    return () => {document.body.style.overflow = "";window.removeEventListener("keydown", onKey);};
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
   }, [bird, onClose]);
   if (!bird) return null;
   return (
@@ -261,8 +261,8 @@ window.MobileSheet = function MobileSheet({ bird, onClose, children }) {
         <div className="msheet-grab" />
         {children}
       </div>
-    </div>);
-
+    </div>
+  );
 };
 
 window.MobileFilterBar = function MobileFilterBar({ filters, setFilters, search, setSearch, sort, setSort, count }) {
@@ -275,8 +275,8 @@ window.MobileFilterBar = function MobileFilterBar({ filters, setFilters, search,
       return { ...f, [key]: [...set] };
     });
   };
-  const clearAll = () => {setFilters({ habitat: [], behavior: [], region: [], rarity: [] });setSearch("");};
-  const H = window.HABITAT_META,B = window.BEHAVIOR_META,R = window.REGION_META,RA = window.RARITY_META;
+  const clearAll = () => { setFilters({ habitat: [], behavior: [], region: [], rarity: [] }); setSearch(""); };
+  const H = window.HABITAT_META, B = window.BEHAVIOR_META, R = window.REGION_META, RA = window.RARITY_META;
   return (
     <>
       <div className="mfilter-bar">
@@ -284,13 +284,13 @@ window.MobileFilterBar = function MobileFilterBar({ filters, setFilters, search,
           <span>🔎</span>
           <input placeholder="Search by name…" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
-        <button className={`mfilter-toggle ${open ? "on" : ""}`} onClick={() => setOpen((o) => !o)}>
+        <button className={`mfilter-toggle ${open ? "on" : ""}`} onClick={() => setOpen(o => !o)}>
           ☰ Filters {total > 0 && <span className="badge-n">{total}</span>}
         </button>
         <span style={{ marginLeft: "auto", color: "var(--ink-faint)", fontSize: 11, fontFamily: "JetBrains Mono, monospace" }}>{count} found</span>
       </div>
-      {open &&
-      <div className="mfilter-panel">
+      {open && (
+        <div className="mfilter-panel">
           <select className="sortsel" value={sort} onChange={(e) => setSort(e.target.value)}>
             <option value="photos">Photos first</option>
             <option value="newest">Newest spotted</option>
@@ -299,13 +299,13 @@ window.MobileFilterBar = function MobileFilterBar({ filters, setFilters, search,
             <option value="num">Dex number</option>
             <option value="rarity">Rarity</option>
           </select>
-          <div className="row"><span className="label">Habitat</span>{Object.keys(H).map((k) => <button key={k} className={`chip ${filters.habitat.includes(k) ? "on" : ""}`} onClick={() => toggle("habitat", k)}>{H[k].emoji} {k}</button>)}</div>
-          <div className="row"><span className="label">Behavior</span>{Object.keys(B).map((k) => <button key={k} className={`chip ${filters.behavior.includes(k) ? "on" : ""}`} onClick={() => toggle("behavior", k)}>{B[k].emoji} {k}</button>)}</div>
-          <div className="row"><span className="label">Region</span>{Object.keys(R).map((k) => <button key={k} className={`chip ${filters.region.includes(k) ? "on" : ""}`} onClick={() => toggle("region", k)}>{R[k].emoji} {k}</button>)}</div>
-          <div className="row"><span className="label">Rarity</span>{Object.keys(RA).map((k) => <button key={k} className={`chip ${filters.rarity?.includes(k) ? "on" : ""}`} onClick={() => toggle("rarity", k)}>{RA[k].emoji} {k}</button>)}</div>
+          <div className="row"><span className="label">Habitat</span>{Object.keys(H).map(k => <button key={k} className={`chip ${filters.habitat.includes(k) ? "on" : ""}`} onClick={() => toggle("habitat", k)}>{H[k].emoji} {k}</button>)}</div>
+          <div className="row"><span className="label">Behavior</span>{Object.keys(B).map(k => <button key={k} className={`chip ${filters.behavior.includes(k) ? "on" : ""}`} onClick={() => toggle("behavior", k)}>{B[k].emoji} {k}</button>)}</div>
+          <div className="row"><span className="label">Region</span>{Object.keys(R).map(k => <button key={k} className={`chip ${filters.region.includes(k) ? "on" : ""}`} onClick={() => toggle("region", k)}>{R[k].emoji} {k}</button>)}</div>
+          <div className="row"><span className="label">Rarity</span>{Object.keys(RA).map(k => <button key={k} className={`chip ${filters.rarity?.includes(k) ? "on" : ""}`} onClick={() => toggle("rarity", k)}>{RA[k].emoji} {k}</button>)}</div>
           <button className="chip" onClick={clearAll} style={{ alignSelf: "flex-start" }}>✕ Clear all</button>
         </div>
-      }
-    </>);
-
+      )}
+    </>
+  );
 };

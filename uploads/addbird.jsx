@@ -1,7 +1,7 @@
 /* global React, HABITAT_META, BEHAVIOR_META, REGION_META, RARITY_META, STAT_META */
 // Add-Bird modal + custom-bird storage (supports edit mode + up to 5 photos
 // + stats + signature move + photo reordering + delete-from-edit)
-const { useState: _useState, useEffect: _useEffect, useCallback: _useCallback } = React; 
+const { useState: _useState, useEffect: _useEffect, useCallback: _useCallback } = React;
 
 const CUSTOM_KEY = "ph_custom_birds_v1";
 const EDITS_KEY  = "ph_bird_edits_v1";
